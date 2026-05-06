@@ -1,0 +1,11 @@
+{
+  "buildCommand": "bun run build",
+  "outputDirectory": "dist/client",
+  "regions": ["sfo1"],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.js"
+    }
+  ]
+}

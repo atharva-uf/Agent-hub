@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Hub — UI Wireframes</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #07090f;
+      color: #94a3b8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 48px 32px 80px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* ── Page header ── */
+    .doc-title    { font-size: 22px; font-weight: 700; color: #f1f5f9; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .doc-subtitle { font-size: 12px; color: #475569; margin-bottom: 52px; }
+
+    /* ── Screen wrapper ── */
+    .screen-section { margin-bottom: 72px; }
+    .screen-label   { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #7c3aed; margin-bottom: 6px; }
+    .screen-title   { font-size: 17px; font-weight: 600; color: #e2e8f0; margin-bottom: 20px; }
+
+    /* ── Wireframe frame ── */
+    .frame { position: relative; border: 1px solid #1e293b; border-radius: 12px; background: #0b0e1b; overflow: visible; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 52px;
+      border-right: 1px solid #1e293b; border-radius: 12px 0 0 12px;
+      background: #070a14;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 14px 0; gap: 8px;
+    }
+    .sb-logo { width: 28px; height: 28px; border: 1px solid rgba(124,58,237,.3); border-radius: 6px; background: rgba(124,58,237,.08); margin-bottom: 8px; }
+    .sb-icon { width: 28px; height: 28px; border-radius: 6px; background: #111827; border: 1px solid #1e293b; }
+    .sb-icon.active { background: rgba(124,58,237,.12); border-color: rgba(124,58,237,.3); }
+
+    /* ── Main content area ── */
+    .main { margin-left: 52px; padding: 20px 22px; min-height: 360px; }
+
+    /* ── Generic helpers ── */
+    .row { display: flex; gap: 10px; align-items: center; }
+    .h1  { font-size: 15px; font-weight: 600; color: #f1f5f9; }
+    .h2  { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+    .sm  { font-size: 11px; color: #64748b; }
+    .mono { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; }
+    .divider { height: 1px; background: #1e293b; margin: 14px 0; }
+    .block { background: #111827; border: 1px solid #1e293b; border-radius: 8px; }
+
+    /* ── Input / Select stubs ── */
+    .input-stub {
+      height: 34px; border: 1px solid #1e293b; border-radius: 8px; background: #0f172a;
+      padding: 0 12px; display: flex; align-items: center; color: #475569; font-size: 12px; gap: 6px;
+    }
+    .select-stub {
+      height: 34px; border: 1px solid #1e293b; border-radius: 8px; background: #0f172a;
+      padding: 0 10px; display: flex; align-items: center; justify-content: space-between;
+      color: #64748b; font-size: 12px; white-space: nowrap; gap: 8px;
+    }
+
+    /* ── Table ── */
+    .tbl-head { display: grid; grid-template-columns: 5fr 2fr 2fr 2fr 1fr; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #1e293b; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: #475569; }
+    .tbl-row  { display: grid; grid-template-columns: 5fr 2fr 2fr 2fr 1fr; gap: 8px; padding: 11px 14px; border-bottom: 1px solid #1e293b; align-items: center; font-size: 12px; }
+    .tbl-row:last-child { border-bottom: none; }
+
+    /* ── Badges ── */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+    .b-healthy  { background: rgba(34,197,94,.1);  color: #22c55e; border: 1px solid rgba(34,197,94,.25); }
+    .b-warning  { background: rgba(245,158,11,.1); color: #f59e0b; border: 1px solid rgba(245,158,11,.25); }
+    .b-critical { background: rgba(239,68,68,.1);  color: #ef4444; border: 1px solid rgba(239,68,68,.25); }
+    .b-running  { background: rgba(139,92,246,.1); color: #8b5cf6; border: 1px solid rgba(139,92,246,.25); }
+    .b-neutral  { background: #1e293b; color: #94a3b8; border: 1px solid #2d3748; }
+    .b-success  { background: rgba(34,197,94,.1);  color: #22c55e; border: 1px solid rgba(34,197,94,.25); }
+
+    /* ── Insight cards ── */
+    .insight-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; }
+    .insight-card { background: #111827; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; }
+
+    /* ── Buttons ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap; border: none; cursor: pointer; }
+    .btn-primary { background: #7c3aed; color: #fff; }
+    .btn-outline  { background: transparent; color: #94a3b8; border: 1px solid #1e293b; }
+    .btn-sm { padding: 5px 10px; font-size: 11px; }
+
+    /* ── Tag ── */
+    .tag { display: inline-block; padding: 2px 8px; border: 1px solid #1e293b; border-radius: 6px; font-size: 10px; color: #64748b; background: rgba(15,23,42,.6); }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; align-items: center; padding: 12px; background: rgba(15,23,42,.4); border: 1px solid #1e293b; border-radius: 10px; }
+    .step-wrap { display: flex; flex: 1; align-items: center; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .sd-pending { background: #1e293b; border: 1px solid #334155; color: #475569; }
+    .sd-success { background: rgba(34,197,94,.12); border: 2px solid rgba(34,197,94,.4); color: #22c55e; }
+    .sd-active  { background: rgba(139,92,246,.12); border: 2px solid rgba(139,92,246,.4); color: #8b5cf6; }
+    .sd-error   { background: rgba(239,68,68,.12);  border: 2px solid rgba(239,68,68,.4);  color: #ef4444; }
+    .step-info { margin-left: 7px; }
+    .step-name { font-size: 11px; font-weight: 500; color: #cbd5e1; }
+    .step-dur  { font-size: 10px; font-family: monospace; color: #475569; margin-top: 1px; }
+    .connector { flex: 1; height: 1px; background: #1e293b; margin: 0 8px; min-width: 8px; }
+    .connector.done { background: rgba(34,197,94,.3); }
+
+    /* ── Log terminal ── */
+    .terminal { background: #050810; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; font-family: 'SF Mono','Fira Code','Consolas',monospace; font-size: 11px; line-height: 1.75; }
+    .ll { display: flex; gap: 10px; }
+    .lt { color: #334155; flex-shrink: 0; }
+    .li { color: #60a5fa; }
+    .lc { color: #a78bfa; }
+    .ls { color: #34d399; }
+    .lw { color: #fbbf24; }
+    .le { color: #f87171; }
+
+    /* ── Result card ── */
+    .result-card { border: 1px solid #1e293b; border-radius: 10px; overflow: hidden; }
+    .result-head { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; background: rgba(34,197,94,.08); border-bottom: 1px solid rgba(34,197,94,.15); }
+    .result-stats { display: grid; grid-template-columns: repeat(4,1fr); background: #111827; }
+    .stat-cell { padding: 12px 16px; border-right: 1px solid #1e293b; }
+    .stat-cell:last-child { border-right: none; }
+    .stat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #475569; margin-bottom: 4px; }
+    .stat-val { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+
+    /* ── Dialog ── */
+    .overlay { position: absolute; inset: 0; background: rgba(7,9,15,.78); border-radius: 12px; display: flex; align-items: center; justify-content: center; z-index: 5; }
+    .dialog  { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; width: 420px; }
+    .task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+    .task-card { padding: 12px; border: 1px solid #1e293b; border-radius: 8px; background: #111827; font-size: 12px; color: #94a3b8; }
+    .task-card.sel { border-color: rgba(124,58,237,.5); background: rgba(124,58,237,.1); color: #a78bfa; }
+
+    /* ── Details drawer ── */
+    .drawer { position: absolute; right: 0; top: 0; bottom: 0; width: 290px; background: #0b0e1b; border-left: 1px solid #1e293b; border-radius: 0 12px 12px 0; display: flex; flex-direction: column; z-index: 6; }
+    .drawer-hdr { padding: 14px 16px; border-bottom: 1px solid #1e293b; }
+    .sec-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #475569; margin-bottom: 8px; }
+    .level-counts { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 14px; border-bottom: 1px solid #1e293b; }
+    .lvl-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; }
+
+    /* ── Empty state ── */
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 36px 24px; border: 1px solid rgba(30,41,59,.6); border-radius: 12px; background: rgba(15,23,42,.2); text-align: center; }
+
+    /* ── Meta row ── */
+    .meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding-top: 12px; border-top: 1px solid #1e293b; font-size: 11px; color: #64748b; }
+    .meta-item { display: flex; align-items: center; gap: 5px; }
+
+    /* ── Annotation dot ── */
+    .ann {
+      position: absolute;
+      width: 22px; height: 22px;
+      background: #7c3aed; border: 2px solid #07090f;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; color: #fff;
+      z-index: 30; box-shadow: 0 0 0 1px rgba(124,58,237,.4);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      letter-spacing: -0.01em; user-select: none;
+    }
+
+    /* ── Legend ── */
+    .legend { margin-top: 22px; border: 1px solid #1e293b; border-radius: 10px; overflow: hidden; }
+    .legend-hdr { padding: 9px 16px; background: #111827; border-bottom: 1px solid #1e293b; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #475569; }
+    .legend-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .legend-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #1e293b; border-right: 1px solid #1e293b; font-size: 12px; }
+    .legend-item:nth-child(even)  { border-right: none; }
+    .legend-item:nth-last-child(-n+2) { border-bottom: none; }
+    .legend-dot { width: 18px; height: 18px; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px; }
+    .legend-text { color: #94a3b8; line-height: 1.45; }
+    .legend-text strong { color: #cbd5e1; display: block; margin-bottom: 2px; font-size: 12px; }
+    .legend-item.single { grid-column: span 2; border-right: none; }
+  </style>
+</head>
+<body>
+
+<div class="doc-title">Agent Hub — UI Wireframes</div>
+<div class="doc-subtitle">4 screens &nbsp;·&nbsp; 16 annotations (A – P) &nbsp;·&nbsp; annotated design decisions</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 1 — Repository List
+════════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">Screen 01</div>
+  <div class="screen-title">Repository List</div>
+
+  <div class="frame">
+    <div class="sidebar">
+      <div class="sb-logo"></div>
+      <div class="sb-icon active"></div>
+      <div class="sb-icon"></div>
+      <div class="sb-icon"></div>
+    </div>
+    <div class="main">
+      <!-- Page heading -->
+      <div style="margin-bottom:16px;">
+        <div class="h1" style="margin-bottom:3px;">Repositories</div>
+        <div class="sm">12 repositories · select one to view insights and run an agent task.</div>
+      </div>
+
+      <!-- Filters row -->
+      <div class="row" style="margin-bottom:14px; position:relative;">
+        <div class="input-stub" style="flex:1;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Search repositories...
+        </div>
+        <div class="select-stub" style="width:148px;">All languages <span style="color:#334155;">▾</span></div>
+        <div class="select-stub" style="width:136px;">All statuses <span style="color:#334155;">▾</span></div>
+        <div class="ann" style="top:-11px; right:-11px;">A</div>
+      </div>
+
+      <!-- Table -->
+      <div class="block">
+        <div class="tbl-head"><div>Repository</div><div>Language</div><div>Open PRs</div><div>Updated</div><div></div></div>
+
+        <div class="tbl-row" style="position:relative;">
+          <div>
+            <div class="row" style="gap:7px; margin-bottom:4px;">
+              <span style="font-size:13px;font-weight:600;color:#f1f5f9;">edge-runtime</span>
+              <span class="badge b-healthy">● Healthy</span>
+              <div class="ann" style="top:-11px; left:108px;">B</div>
+            </div>
+            <div class="sm">High-performance edge computing runtime for distributed workloads</div>
+          </div>
+          <div class="sm mono">TypeScript</div>
+          <div class="sm">3 open</div>
+          <div class="sm">2h ago</div>
+          <div style="color:#334155;">›</div>
+        </div>
+
+        <div class="tbl-row">
+          <div>
+            <div class="row" style="gap:7px; margin-bottom:4px;">
+              <span style="font-size:13px;font-weight:600;color:#f1f5f9;">infra-pipeline</span>
+              <span class="badge b-warning">● Warning</span>
+            </div>
+            <div class="sm">CI/CD orchestration pipeline for multi-cloud deployments</div>
+          </div>
+          <div class="sm mono">Go</div>
+          <div class="sm">7 open</div>
+          <div class="sm">5h ago</div>
+          <div style="color:#334155;">›</div>
+        </div>
+
+        <div class="tbl-row">
+          <div>
+            <div class="row" style="gap:7px; margin-bottom:4px;">
+              <span style="font-size:13px;font-weight:600;color:#f1f5f9;">auth-service</span>
+              <span class="badge b-critical">● Critical</span>
+            </div>
+            <div class="sm">OAuth 2.0 and JWT authentication microservice</div>
+          </div>
+          <div class="sm mono">Python</div>
+          <div class="sm">12 open</div>
+          <div class="sm">1d ago</div>
+          <div style="color:#334155;">›</div>
+        </div>
+
+        <div style="padding:10px 14px; text-align:center;" class="sm">· · · 9 more repositories</div>
+      </div>
+
+      <!-- Empty state note -->
+      <div class="sm" style="margin-top:8px; color:#334155;">
+        ↑ When filters return 0 results: "No repositories match your filters." shown inline — no redirect.
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-hdr">Annotations — Screen 01</div>
+    <div class="legend-grid">
+      <div class="legend-item">
+        <div class="legend-dot">A</div>
+        <div class="legend-text"><strong>Search + Filter bar</strong>Text search runs against name, description, and tags. Language and health dropdowns apply client-side via useMemo — no network round-trip per keystroke. Filters compose: all three work simultaneously.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">B</div>
+        <div class="legend-text"><strong>Health badge — three-state</strong>Healthy (green) · Warning (amber) · Critical (red). Dot + label so the state is readable without relying on color alone. Filterable via the status dropdown above the table.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 2 — Repository Detail (idle)
+════════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">Screen 02</div>
+  <div class="screen-title">Repository Detail — Insights &amp; Idle Agent Panel</div>
+
+  <div class="frame">
+    <div class="sidebar">
+      <div class="sb-logo"></div>
+      <div class="sb-icon active"></div>
+      <div class="sb-icon"></div>
+      <div class="sb-icon"></div>
+    </div>
+    <div class="main">
+      <!-- Back nav -->
+      <div style="margin-bottom:14px;">
+        <span style="font-size:13px;font-weight:500;color:#64748b;display:inline-flex;align-items:center;gap:6px;">← All repositories</span>
+      </div>
+
+      <!-- Repo header card -->
+      <div class="block" style="padding:16px; margin-bottom:12px;">
+        <div class="row" style="justify-content:space-between; align-items:flex-start; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div class="row" style="gap:7px; margin-bottom:6px; flex-wrap:wrap;">
+              <span style="color:#64748b;font-size:13px;">acme/</span>
+              <span class="h1">edge-runtime</span>
+              <span class="badge b-healthy">● Healthy</span>
+            </div>
+            <div class="sm" style="color:#94a3b8; margin-bottom:8px;">High-performance edge computing runtime for distributed workloads.</div>
+            <div class="row" style="gap:5px;">
+              <span class="tag">edge</span><span class="tag">typescript</span><span class="tag">wasm</span>
+            </div>
+          </div>
+          <div style="position:relative;">
+            <button class="btn btn-primary">▶ Run Agent Task</button>
+            <div class="ann" style="top:-11px; right:-11px;">E</div>
+          </div>
+        </div>
+
+        <!-- Meta row -->
+        <div class="meta-row" style="position:relative;">
+          <div class="meta-item"><span class="mono" style="color:#cbd5e1;">a3f2c1d</span> <span>fix: improve memory allocation</span> <span style="color:#334155;">2h ago</span></div>
+          <div class="meta-item"><span>3 open PRs</span></div>
+          <div class="meta-item" style="position:relative;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            <span class="mono" style="color:#cbd5e1; cursor:pointer;">main ▾</span>
+            <div class="ann" style="top:-11px; right:-14px;">D</div>
+          </div>
+          <div class="meta-item" style="color:#22c55e;">✓ Build passing</div>
+          <div class="meta-item">Updated 2h ago</div>
+          <div class="ann" style="bottom:-12px; left:0;">C</div>
+        </div>
+      </div>
+
+      <!-- Insights section -->
+      <div style="margin-bottom:12px;">
+        <div class="row" style="justify-content:space-between; margin-bottom:8px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#475569;">Insights</div>
+          <div class="sm">last 30 days</div>
+        </div>
+        <div class="insight-grid" style="position:relative;">
+          <div class="insight-card"><div class="sm" style="margin-bottom:3px;">Stars</div><div class="h2">1,284</div></div>
+          <div class="insight-card"><div class="sm" style="margin-bottom:3px;">Contributors</div><div class="h2">42</div></div>
+          <div class="insight-card"><div class="sm" style="margin-bottom:3px;">Test Coverage</div><div class="h2">87%</div></div>
+          <div class="insight-card"><div class="sm" style="margin-bottom:3px;">Open Issues</div><div class="h2">12</div></div>
+          <div class="insight-card"><div class="sm" style="margin-bottom:3px;">Deploys</div><div class="h2">64</div></div>
+          <div class="insight-card"><div class="sm" style="margin-bottom:3px;">Avg PR Time</div><div class="h2">6h</div></div>
+          <div class="ann" style="top:-11px; right:-11px;">F</div>
+        </div>
+      </div>
+
+      <!-- Agent panel — idle -->
+      <div class="block" style="padding:16px; background:#070a14;">
+        <div class="row" style="justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div class="row" style="gap:8px; margin-bottom:3px;">
+              <span class="h2">Agent Execution</span>
+              <span class="badge b-neutral">● Idle</span>
+            </div>
+            <div class="sm">No task running. Trigger an agent task to begin.</div>
+          </div>
+          <button class="btn btn-outline btn-sm" style="opacity:.4;" disabled>View details</button>
+        </div>
+        <!-- Timeline pending -->
+        <div class="timeline" style="margin-bottom:12px;">
+          <div class="step-wrap"><div class="step-dot sd-pending">○</div><div class="step-info"><div class="step-name">Initialize</div><div class="step-dur">—</div></div></div>
+          <div class="connector"></div>
+          <div class="step-wrap"><div class="step-dot sd-pending">○</div><div class="step-info"><div class="step-name">Analyze</div><div class="step-dur">—</div></div></div>
+          <div class="connector"></div>
+          <div class="step-wrap"><div class="step-dot sd-pending">○</div><div class="step-info"><div class="step-name">Install</div><div class="step-dur">—</div></div></div>
+          <div class="connector"></div>
+          <div class="step-wrap"><div class="step-dot sd-pending">○</div><div class="step-info"><div class="step-name">Test</div><div class="step-dur">—</div></div></div>
+          <div class="connector"></div>
+          <div class="step-wrap"><div class="step-dot sd-pending">○</div><div class="step-info"><div class="step-name">Report</div><div class="step-dur">—</div></div></div>
+          <div class="connector"></div>
+          <div class="step-wrap"><div class="step-dot sd-pending">○</div><div class="step-info"><div class="step-name">Finalize</div><div class="step-dur">—</div></div></div>
+        </div>
+        <!-- Empty state -->
+        <div class="empty-state">
+          <div style="font-size:13px; font-weight:500; color:#cbd5e1;">No execution started</div>
+          <button class="btn btn-primary">▶ Run Agent Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-hdr">Annotations — Screen 02</div>
+    <div class="legend-grid">
+      <div class="legend-item">
+        <div class="legend-dot">C</div>
+        <div class="legend-text"><strong>Commit metadata strip</strong>Commit SHA (mono, 7 chars), truncated message, open PR count, branch selector, build status, and relative timestamp — all in one horizontal scannable row below the description.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">D</div>
+        <div class="legend-text"><strong>Branch selector</strong>Interactive dropdown defaulting to the repo's default branch. Lets the developer target a specific branch before triggering an agent task — state is local, no network call.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">E</div>
+        <div class="legend-text"><strong>Primary CTA — Run Agent Task</strong>Present in the repo header and in the agent panel's empty state. Scrolls to the agent panel and opens the task modal via a custom window event (no prop drilling).</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">F</div>
+        <div class="legend-text"><strong>Insight cards</strong>6 read-only metrics giving context before a task is triggered. Stars, contributors, test coverage, open issues, deploys, avg PR time. No interaction — they inform, not control.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 3 — Task Modal
+════════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">Screen 03</div>
+  <div class="screen-title">Run Agent Task — Task Modal</div>
+
+  <div class="frame" style="min-height:400px;">
+    <div class="sidebar">
+      <div class="sb-logo"></div>
+      <div class="sb-icon active"></div>
+      <div class="sb-icon"></div>
+      <div class="sb-icon"></div>
+    </div>
+    <div class="main" style="position:relative; min-height:360px;">
+      <!-- Background content (blurred behind modal) -->
+      <div style="opacity:.18;">
+        <div class="h1" style="margin-bottom:6px;">edge-runtime</div>
+        <div class="sm">Repository detail content visible behind the modal overlay…</div>
+      </div>
+
+      <!-- Modal overlay -->
+      <div class="overlay">
+        <div class="dialog" style="position:relative; width:440px;">
+          <!-- Title + close -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div class="h2" style="font-size:15px; margin-bottom:4px;">Run agent task</div>
+              <div class="sm">Choose a task. The agent will stream execution into the panel below.</div>
+            </div>
+            <span style="color:#475569; font-size:16px; cursor:pointer; line-height:1; padding:2px 6px;">✕</span>
+          </div>
+
+          <!-- Task type label + Select dropdown -->
+          <div style="margin-top:18px; margin-bottom:14px; position:relative;">
+            <div class="sm" style="margin-bottom:6px; font-weight:500; color:#94a3b8;">Task type</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; background:#0b0e1b; border:1px solid #7c3aed; border-radius:8px; padding:10px 12px; font-size:13px; color:#e2e8f0; cursor:pointer;">
+              <span>Run tests</span>
+              <span style="color:#64748b;">▾</span>
+            </div>
+            <!-- Dropdown open — showing options -->
+            <div style="position:absolute; left:0; right:0; top:calc(100% + 4px); background:#0f172a; border:1px solid #1e293b; border-radius:8px; overflow:hidden; z-index:10; box-shadow:0 8px 24px rgba(0,0,0,.5);">
+              <div style="padding:8px 12px; font-size:12px; color:#a78bfa; background:rgba(124,58,237,.08);">Run tests</div>
+              <div style="padding:8px 12px; font-size:12px; color:#94a3b8; border-top:1px solid #1e293b;">Refactor code</div>
+              <div style="padding:8px 12px; font-size:12px; color:#94a3b8; border-top:1px solid #1e293b;">Dependency scan</div>
+              <div style="padding:8px 12px; font-size:12px; color:#94a3b8; border-top:1px solid #1e293b;">Create PR</div>
+            </div>
+            <div class="ann" style="top:-11px; right:-11px;">G</div>
+          </div>
+
+          <!-- Config textarea — pushed down to clear dropdown -->
+          <div style="margin-top:80px; margin-bottom:16px; position:relative;">
+            <div class="sm" style="margin-bottom:6px; font-weight:500; color:#94a3b8;">
+              Config <span style="color:#475569;">(optional)</span>
+            </div>
+            <div style="background:#0b0e1b; border:1px solid #1e293b; border-radius:8px; padding:10px 12px; font-size:12px; color:#334155; font-family:monospace; min-height:80px;">
+              e.g. --shard=1/4 or { "branch": "feat/x" }
+            </div>
+            <div class="ann" style="top:-11px; right:-11px;">H</div>
+          </div>
+
+          <!-- Actions -->
+          <div class="row" style="justify-content:flex-end; gap:10px;">
+            <button class="btn btn-outline btn-sm" style="color:#94a3b8;">Cancel</button>
+            <button class="btn btn-primary btn-sm">▶ Run task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-hdr">Annotations — Screen 03</div>
+    <div class="legend-grid">
+      <div class="legend-item">
+        <div class="legend-dot">G</div>
+        <div class="legend-text"><strong>Task type — Select dropdown</strong>A single Select control with 4 options: Run tests, Refactor code, Dependency scan, Create PR. Defaults to "Run tests" on open. Selecting is the only required step before Run task becomes submittable.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">H</div>
+        <div class="legend-text"><strong>Config textarea (optional)</strong>Monospace textarea accepting CLI flags or JSON. Placeholder: <code style="font-size:10px;color:#94a3b8;">e.g. --shard=1/4 or { "branch": "feat/x" }</code>. Optional and understated — most runs don't need it.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 4 — Execution + Results + Drawer
+════════════════════════════════════════════════════ -->
+<div class="screen-section">
+  <div class="screen-label">Screen 04</div>
+  <div class="screen-title">Agent Execution — Running → Success with Execution Details Drawer</div>
+
+  <div class="frame" style="min-height:700px;">
+    <div class="sidebar">
+      <div class="sb-logo"></div>
+      <div class="sb-icon active"></div>
+      <div class="sb-icon"></div>
+      <div class="sb-icon"></div>
+    </div>
+
+    <!-- Main content — leave 290px right margin for drawer -->
+    <div class="main" style="padding-right:306px; position:relative;">
+      <!-- Panel header -->
+      <div style="margin-bottom:12px;">
+        <div class="row" style="justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div class="row" style="gap:8px; margin-bottom:3px;">
+              <span class="h2">Agent Execution</span>
+              <span class="badge b-success" style="position:relative;">
+                ● Success
+                <div class="ann" style="top:-11px; right:-14px;">M</div>
+              </span>
+            </div>
+            <div class="sm">Run tests · acme/edge-runtime</div>
+          </div>
+          <div class="row" style="gap:8px;">
+            <div style="position:relative;">
+              <button class="btn btn-outline btn-sm">View details</button>
+              <div class="ann" style="top:-11px; right:-11px;">P</div>
+            </div>
+            <div style="position:relative;">
+              <button class="btn btn-outline btn-sm">↺ Retry</button>
+              <div class="ann" style="top:-11px; right:-11px;">O</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline — all success -->
+      <div class="timeline" style="margin-bottom:12px; position:relative;">
+        <div class="step-wrap"><div class="step-dot sd-success">✓</div><div class="step-info"><div class="step-name">Initialize</div><div class="step-dur">1.6s</div></div></div>
+        <div class="connector done"></div>
+        <div class="step-wrap"><div class="step-dot sd-success">✓</div><div class="step-info"><div class="step-name">Analyze</div><div class="step-dur">2.4s</div></div></div>
+        <div class="connector done"></div>
+        <div class="step-wrap"><div class="step-dot sd-success">✓</div><div class="step-info"><div class="step-name">Install</div><div class="step-dur">2.9s</div></div></div>
+        <div class="connector done"></div>
+        <div class="step-wrap"><div class="step-dot sd-success">✓</div><div class="step-info"><div class="step-name">Test</div><div class="step-dur">5.5s</div></div></div>
+        <div class="connector done"></div>
+        <div class="step-wrap"><div class="step-dot sd-success">✓</div><div class="step-info"><div class="step-name">Report</div><div class="step-dur">0.8s</div></div></div>
+        <div class="connector done"></div>
+        <div class="step-wrap"><div class="step-dot sd-success">✓</div><div class="step-info"><div class="step-name">Finalize</div><div class="step-dur">0.3s</div></div></div>
+        <div class="ann" style="top:-11px; left:-11px;">I</div>
+        <div class="ann" style="bottom:-11px; left:50%; transform:translateX(-50%);">J</div>
+      </div>
+
+      <!-- Log terminal -->
+      <div style="margin-bottom:12px; position:relative; border:1px solid #1e293b; border-radius:10px; overflow:hidden; background:#050810;">
+        <!-- Terminal chrome bar -->
+        <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1e293b; padding:7px 14px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="width:10px;height:10px;border-radius:50%;background:rgba(239,68,68,.7);display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:rgba(245,158,11,.7);display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:rgba(34,197,94,.7);display:inline-block;"></span>
+          </div>
+          <span class="mono" style="font-size:11px;color:#475569;">agent.log</span>
+          <span class="mono" style="font-size:11px;color:#475569;">9 lines</span>
+        </div>
+        <!-- Log lines -->
+        <div class="terminal" style="border:none; border-radius:0; position:relative; overflow:hidden; height:152px;">
+          <div class="ll"><span class="lt">09:41:02</span><span class="li" style="width:72px;flex-shrink:0;">[INFO]   </span><span style="color:#cbd5e1;">Initializing agent environment for edge-runtime…</span></div>
+          <div class="ll"><span class="lt">09:41:03</span><span class="lc" style="width:72px;flex-shrink:0;">[CMD]    </span><span style="color:#cbd5e1;">$ bun install --frozen-lockfile</span></div>
+          <div class="ll"><span class="lt">09:41:04</span><span class="li" style="width:72px;flex-shrink:0;">[INFO]   </span><span style="color:#cbd5e1;">Installing 312 packages…</span></div>
+          <div class="ll"><span class="lt">09:41:07</span><span class="ls" style="width:72px;flex-shrink:0;">[SUCCESS]</span><span style="color:#cbd5e1;">Dependencies installed in 3.1s</span></div>
+          <div class="ll"><span class="lt">09:41:08</span><span class="lc" style="width:72px;flex-shrink:0;">[CMD]    </span><span style="color:#cbd5e1;">$ bun test --coverage</span></div>
+          <div class="ll"><span class="lt">09:41:09</span><span class="li" style="width:72px;flex-shrink:0;">[INFO]   </span><span style="color:#cbd5e1;">Running 412 tests across 48 files…</span></div>
+          <div class="ll"><span class="lt">09:41:13</span><span class="ls" style="width:72px;flex-shrink:0;">[SUCCESS]</span><span style="color:#cbd5e1;">412 passed · 0 failed · coverage 87%</span></div>
+          <div class="ll"><span class="lt">09:41:14</span><span class="lw" style="width:72px;flex-shrink:0;">[WARN]   </span><span style="color:#cbd5e1;">2 tests marked as flaky (skipped)</span></div>
+          <div class="ll"><span class="lt">09:41:15</span><span class="ls" style="width:72px;flex-shrink:0;">[SUCCESS]</span><span style="color:#cbd5e1;">Task complete — no issues detected</span></div>
+          <div class="ann" style="top:6px; right:6px;">K</div>
+          <div class="ann" style="bottom:6px; right:6px;">L</div>
+        </div>
+      </div>
+
+      <!-- Result summary -->
+      <div class="result-card" style="position:relative;">
+        <div class="result-head">
+          <div class="row" style="gap:8px;">
+            <span style="color:#22c55e;">✓</span>
+            <span style="font-size:13px; font-weight:600; color:#f1f5f9;">Agent task completed successfully</span>
+          </div>
+          <span class="badge b-success" style="font-size:11px;">✦ High confidence result</span>
+        </div>
+        <div class="result-stats">
+          <div class="stat-cell"><div class="stat-lbl">Tests</div><div class="stat-val">412 <span style="font-size:11px;font-weight:400;color:#475569;">passed</span></div></div>
+          <div class="stat-cell"><div class="stat-lbl">Issues Detected</div><div class="stat-val">0</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Issues Fixed</div><div class="stat-val">0</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Duration</div><div class="stat-val">13.5s</div></div>
+        </div>
+        <div class="ann" style="top:-11px; left:48%; transform:translateX(-50%);">M</div>
+        <div class="ann" style="top:10px; right:-11px;">N</div>
+      </div>
+    </div>
+
+    <!-- Details drawer -->
+    <div class="drawer">
+      <div class="drawer-hdr">
+        <div class="h2" style="margin-bottom:3px;">Execution details</div>
+        <div class="sm">Run tests · Status: Success · 9 log lines · 6/6 steps</div>
+      </div>
+
+      <!-- Log level counts -->
+      <div class="level-counts">
+        <span class="lvl-chip" style="background:rgba(96,165,250,.1);color:#60a5fa;">INFO 4</span>
+        <span class="lvl-chip" style="background:rgba(167,139,250,.1);color:#a78bfa;">CMD 2</span>
+        <span class="lvl-chip" style="background:rgba(52,211,153,.1);color:#34d399;">SUCCESS 3</span>
+        <span class="lvl-chip" style="background:rgba(251,191,36,.1);color:#fbbf24;">WARN 1</span>
+      </div>
+
+      <!-- Environment -->
+      <div style="padding:12px 14px; border-bottom:1px solid #1e293b;">
+        <div class="sec-label">Environment</div>
+        <div style="background:#07090f; border:1px solid #1e293b; border-radius:6px; padding:10px; font-family:monospace; font-size:11px; line-height:1.8; color:#64748b;">
+          <span style="color:#475569;">node   </span><span style="color:#94a3b8;">v20.11.1</span><br>
+          <span style="color:#475569;">bun    </span><span style="color:#94a3b8;">1.1.8</span><br>
+          <span style="color:#475569;">region </span><span style="color:#94a3b8;">us-east-1</span><br>
+          <span style="color:#475569;">runner </span><span style="color:#94a3b8;">agent-pool-2</span>
+        </div>
+      </div>
+
+      <!-- Step breakdown -->
+      <div style="padding:12px 14px; overflow:auto; flex:1;">
+        <div class="sec-label">Step Breakdown</div>
+        <div style="border:1px solid #1e293b; border-radius:6px; overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #1e293b;font-size:11px;">
+            <span style="color:#e2e8f0;">1&nbsp; Initialize</span>
+            <div class="row" style="gap:6px;"><span class="mono" style="color:#475569;font-size:10px;">1.6s</span><span class="badge b-success" style="font-size:9px;">✓ Success</span></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #1e293b;font-size:11px;">
+            <span style="color:#e2e8f0;">2&nbsp; Analyze</span>
+            <div class="row" style="gap:6px;"><span class="mono" style="color:#475569;font-size:10px;">2.4s</span><span class="badge b-success" style="font-size:9px;">✓ Success</span></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #1e293b;font-size:11px;">
+            <span style="color:#e2e8f0;">3&nbsp; Install</span>
+            <div class="row" style="gap:6px;"><span class="mono" style="color:#475569;font-size:10px;">2.9s</span><span class="badge b-success" style="font-size:9px;">✓ Success</span></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #1e293b;font-size:11px;">
+            <span style="color:#e2e8f0;">4&nbsp; Test</span>
+            <div class="row" style="gap:6px;"><span class="mono" style="color:#475569;font-size:10px;">5.5s</span><span class="badge b-success" style="font-size:9px;">✓ Success</span></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #1e293b;font-size:11px;">
+            <span style="color:#e2e8f0;">5&nbsp; Report</span>
+            <div class="row" style="gap:6px;"><span class="mono" style="color:#475569;font-size:10px;">0.8s</span><span class="badge b-success" style="font-size:9px;">✓ Success</span></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:11px;">
+            <span style="color:#e2e8f0;">6&nbsp; Finalize</span>
+            <div class="row" style="gap:6px;"><span class="mono" style="color:#475569;font-size:10px;">0.3s</span><span class="badge b-success" style="font-size:9px;">✓ Success</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /frame -->
+
+  <div class="legend">
+    <div class="legend-hdr">Annotations — Screen 04</div>
+    <div class="legend-grid">
+      <div class="legend-item">
+        <div class="legend-dot">I</div>
+        <div class="legend-text"><strong>6-step execution timeline</strong>Initialize → Analyze → Install → Test → Report → Finalize. Each dot transitions: pending ○ → active ⟳ → success ✓ / error ✗. Connector lines turn green as steps complete.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">J</div>
+        <div class="legend-text"><strong>Active step — pulse indicator</strong>The active step dot animates with a pulsing ring. A low-noise "something is happening" signal that works without reading any text. Stops on completion or error.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">K</div>
+        <div class="legend-text"><strong>Semantic log level colors</strong>INFO (blue) · CMD (purple) · OK (green) · WARN (amber) · ERROR (red). Maps to terminal conventions developers already know from CI/CD systems and shell sessions.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">L</div>
+        <div class="legend-text"><strong>Auto-scroll to latest line</strong>Terminal scrolls to the newest log line as each streams in — matching the behaviour of <code style="font-size:10px;color:#94a3b8;">tail -f</code>. Manual scroll up is preserved until a new run starts.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">M</div>
+        <div class="legend-text"><strong>Three independent success signals</strong>Status badge (top) + all-green timeline + result summary card appear simultaneously. A developer at any scroll position receives an unambiguous completion signal without scrolling.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">N</div>
+        <div class="legend-text"><strong>Confidence rating</strong>"High confidence" or "Review recommended" — a second-order signal beyond pass/fail. Surfaces whether the agent is certain of its output, not just whether the run completed.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">O</div>
+        <div class="legend-text"><strong>One-click retry — no dialog</strong>In-flight timers are cancelled and state resets immediately. No "Are you sure?" dialog. A developer who pressed Retry meant to press Retry — confirmation dialogs add friction at the worst moment.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot">P</div>
+        <div class="legend-text"><strong>Execution details drawer</strong>Log level counts (INFO / CMD / OK / WARN / ERROR), environment context (node, runtime, region, runner), and per-step duration breakdown. The post-mortem view — assembled for the developer so they don't have to dig.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div style="border-top:1px solid #1e293b; padding-top:24px; text-align:center;" class="sm">
+  Agent Hub — Agentic Developer Portal &nbsp;·&nbsp; 4 screens &nbsp;·&nbsp; 16 annotations (A – P)
+</div>
+
+</body>
+</html>
